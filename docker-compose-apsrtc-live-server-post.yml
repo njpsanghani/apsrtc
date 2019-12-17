@@ -1,0 +1,204 @@
+version: "3.7"
+
+services:
+  TilePolygonService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar njscommunity.TilePolygonService
+    configs:
+      - source: tile_polygon_service_config
+        target: /app/conf_live/njscommunity.TilePolygonService.conf
+  LiveVehicleService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar njscommunity.LiveVehicleService
+    configs:
+      - source: live_vehicle_service_config
+        target: /app/conf_live/njscommunity.LiveVehicleService.conf
+  LiveTripOddService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    ports:
+      - "9011:9010"
+    restart: always
+    command: java -cp sample1.jar cgm.kafka.services.LiveTripService 1
+    configs:
+      - source: live_trip_service_config
+        target: /app/conf_live/cgm.kafka.services.LiveTripService.conf
+  LiveTripEvenService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    ports:
+      - "9001:9010"
+    restart: always
+    command: java -cp sample1.jar cgm.kafka.services.LiveTripService 2
+    configs:
+      - source: live_trip_service_config
+        target: /app/conf_live/cgm.kafka.services.LiveTripService.conf
+  DBVehicleSummaryService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar njscommunity.DBVehicleSummaryService
+    configs:
+      - source: db_vehicle_summary_service_config
+        target: /app/conf_live/njscommunity.DBVehicleSummaryService.conf
+  DBDataSaveInputStringDtlsService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar njscommunity.DBDataSaveInputStringDtlsService
+    configs:
+      - source: db_data_save_input_string_dtls_service_config
+        target: /app/conf_live/njscommunity.DBDataSaveInputStringDtlsService.conf
+  DBDataSaveVehicleService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.DBDataSaveVehicleService
+    configs:
+      - source: db_data_save_vehicle_service_config
+        target: /app/conf_live/cgm.kafka.services.DBDataSaveVehicleService.conf
+  DBDataSaveCurrentTripService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.DBDataSaveCurrentTripService
+    configs:
+      - source: db_data_save_currenttripstatus_service_config
+        target: /app/conf_live/cgm.kafka.services.DBDataSaveCurrentTripService.conf
+  DBDataSaveTripDetailService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.DBDataSaveTripDetailService
+    configs:
+      - source: db_data_save_tripdetail_service_config
+        target: /app/conf_live/cgm.kafka.services.DBDataSaveTripDetailService.conf
+  DBDataSaveTripLocationDtlsService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.DBDataSaveTripLocationDtlsService
+    configs:
+      - source: db_data_save_triplocationdtls_service_config
+        target: /app/conf_live/cgm.kafka.services.DBDataSaveTripLocationDtlsService.conf
+  SplitTripService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.SplitTripService
+    configs:
+      - source: split_trip_service_config
+        target: /app/conf_live/cgm.kafka.services.SplitTripService.conf
+  RouteViolationService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.RouteViolationService
+    configs:
+      - source: route_violation_service_config
+        target: /app/conf_live/cgm.kafka.services.RouteViolationService.conf
+  OverspeedService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.OverspeedService
+    configs:
+      - source: overspeed_service_config
+        target: /app/conf_live/cgm.kafka.services.OverspeedService.conf
+  UnderspeedService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.UnderspeedService
+    configs:
+      - source: underspeed_service_config
+        target: /app/conf_live/cgm.kafka.services.UnderspeedService.conf
+  DBDataSaveIncidentService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.DBDataSaveIncidentService
+    configs:
+      - source: db_datasave_incident_service_config
+        target: /app/conf_live/cgm.kafka.services.DBDataSaveIncidentService.conf
+  EarlyTripService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.EarlyTripService
+    configs:
+      - source: earlytrip_service_config
+        target: /app/conf_live/cgm.kafka.services.EarlyTripService.conf
+  DelayedTripService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.DelayedTripService
+    configs:
+      - source: delaytrip_service_config
+        target: /app/conf_live/cgm.kafka.services.DelayedTripService.conf
+  UnAuthorizeStationService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.UnAuthorizeStationService
+    configs:
+      - source: unauthorized_station_service_config
+        target: /app/conf_live/cgm.kafka.services.UnAuthorizeStationService.conf
+configs:
+  tile_polygon_service_config:
+    file: ./conf_live/njscommunity.TilePolygonService.conf
+  live_vehicle_service_config:
+    file: ./conf_live/njscommunity.LiveVehicleService.conf
+  live_trip_service_config:
+    file: ./conf_live/cgm.kafka.services.LiveTripService.conf
+  db_data_save_vehicle_service_config:
+    file: ./conf_live/cgm.kafka.services.DBDataSaveVehicleService.conf
+  db_vehicle_summary_service_config:
+    file: ./conf_live/njscommunity.DBVehicleSummaryService.conf
+  db_data_save_input_string_dtls_service_config:
+    file: ./conf_live/njscommunity.DBDataSaveInputStringDtlsService.conf
+  db_data_save_currenttripstatus_service_config:
+    file: ./conf_live/cgm.kafka.services.DBDataSaveCurrentTripService.conf
+  split_trip_service_config:
+    file: ./conf_live/cgm.kafka.services.SplitTripService.conf
+  route_violation_service_config:
+    file: ./conf_live/cgm.kafka.services.RouteViolationService.conf
+  overspeed_service_config:
+    file: ./conf_live/cgm.kafka.services.OverspeedService.conf
+  underspeed_service_config:
+    file: ./conf_live/cgm.kafka.services.UnderspeedService.conf
+  db_datasave_incident_service_config:
+    file: ./conf_live/cgm.kafka.services.DBDataSaveIncidentService.conf
+  earlytrip_service_config:
+    file: ./conf_live/cgm.kafka.services.EarlyTripService.conf
+  delaytrip_service_config:
+    file: ./conf_live/cgm.kafka.services.DelayedTripService.conf
+  unauthorized_station_service_config:
+    file: ./conf_live/cgm.kafka.services.UnAuthorizeStationService.conf
+  db_data_save_tripdetail_service_config:
+    file: ./conf_live/cgm.kafka.services.DBDataSaveTripDetailService.conf
+  db_data_save_triplocationdtls_service_config:
+    file: ./conf_live/cgm.kafka.services.DBDataSaveTripLocationDtlsService.conf
