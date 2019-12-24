@@ -86,15 +86,33 @@ services:
     configs:
       - source: db_data_save_tripdetail_service_config
         target: /app/conf_live/cgm.kafka.services.DBDataSaveTripDetailService.conf
-  DBDataSaveTripLocationDtlsService:
+#  DBDataSaveTripLocationDtlsService:
+#    image: 10.40.10.230:5000/apsrtc_new
+#    deploy:
+#      replicas: 1
+#    restart: always
+#    command: java -cp sample.jar cgm.kafka.services.DBDataSaveTripLocationDtlsService
+#    configs:
+#      - source: db_data_save_triplocationdtls_service_config
+#        target: /app/conf_live/cgm.kafka.services.DBDataSaveTripLocationDtlsService.conf
+  DBDataSaveTripLocationDtlsOddService:
     image: 10.40.10.230:5000/apsrtc_new
     deploy:
       replicas: 1
     restart: always
-    command: java -cp sample.jar cgm.kafka.services.DBDataSaveTripLocationDtlsService
+    command: java -cp sample.jar cgm.kafka.services.DBDataSaveTripLocationDtlsSplitService 1
     configs:
-      - source: db_data_save_triplocationdtls_service_config
-        target: /app/conf_live/cgm.kafka.services.DBDataSaveTripLocationDtlsService.conf
+      - source: db_data_save_triplocationdtls_split_service_config
+        target: /app/conf_live/cgm.kafka.services.DBDataSaveTripLocationDtlsSplitService.conf
+  DBDataSaveTripLocationDtlsEvenService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.DBDataSaveTripLocationDtlsSplitService 2
+    configs:
+      - source: db_data_save_triplocationdtls_split_service_config
+        target: /app/conf_live/cgm.kafka.services.DBDataSaveTripLocationDtlsSplitService.conf
   SplitTripService:
     image: 10.40.10.230:5000/apsrtc_new
     deploy:
@@ -107,7 +125,7 @@ services:
   RouteViolationService:
     image: 10.40.10.230:5000/apsrtc_new
     deploy:
-      replicas: 1
+      replicas: 0
     restart: always
     command: java -cp sample.jar cgm.kafka.services.RouteViolationService
     configs:
@@ -125,7 +143,7 @@ services:
   UnderspeedService:
     image: 10.40.10.230:5000/apsrtc_new
     deploy:
-      replicas: 1
+      replicas: 0
     restart: always
     command: java -cp sample.jar cgm.kafka.services.UnderspeedService
     configs:
@@ -200,5 +218,5 @@ configs:
     file: ./conf_live/cgm.kafka.services.UnAuthorizeStationService.conf
   db_data_save_tripdetail_service_config:
     file: ./conf_live/cgm.kafka.services.DBDataSaveTripDetailService.conf
-  db_data_save_triplocationdtls_service_config:
-    file: ./conf_live/cgm.kafka.services.DBDataSaveTripLocationDtlsService.conf
+  db_data_save_triplocationdtls_split_service_config:
+    file: ./conf_live/cgm.kafka.services.DBDataSaveTripLocationDtlsSplitService.conf
