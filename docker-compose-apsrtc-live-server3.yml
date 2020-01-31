@@ -1,0 +1,81 @@
+version: "3.7"
+
+services:
+  DBCLCService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.DBCLCService
+    configs:
+      - source: dbclc_service_config
+        target: /app/conf_live/cgm.kafka.services.DBCLCService.conf
+  DBTripCLCWaybillService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.DBTripCLCWaybillService
+    configs:
+      - source: dbclc_trip_waybill_service_config
+        target: /app/conf_live/cgm.kafka.services.DBTripCLCWaybillService.conf
+  DBSourceService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 0
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.DBSourceService
+    configs:
+      - source: db_source_service_config
+        target: /app/conf_live/cgm.kafka.services.DBSourceService.conf
+  KTableGeneratorService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.KTableGeneratorService
+    configs:
+      - source: ktable_generater_service_config
+        target: /app/conf_live/cgm.kafka.services.KTableGeneratorService.conf
+  RedisDataSaveService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.RedisDataSaveService
+    configs:
+      - source: redis_data_save_service_config
+        target: /app/conf_live/cgm.kafka.services.RedisDataSaveService.conf
+  DBSaveMasterDataService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 0
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.DBSaveMasterDataService
+    configs:
+      - source: dbsavefortrip_service_config
+        target: /app/conf_live/cgm.kafka.services.DBSaveMasterDataService.conf
+  RedisKeyDeleteScheduler:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.RedisKeyDeleteScheduler
+    configs:
+      - source: rediskey_delete_scheduler_service_config
+        target: /app/conf_live/cgm.kafka.services.RedisKeyDeleteScheduler.conf
+configs:
+  db_source_service_config:
+    file: ./conf_live/cgm.kafka.services.DBSourceService.conf
+  dbclc_service_config:
+    file: ./conf_live/cgm.kafka.services.DBCLCService.conf
+  dbclc_trip_waybill_service_config:
+    file: ./conf_live/cgm.kafka.services.DBTripCLCWaybillService.conf
+  ktable_generater_service_config:
+    file: ./conf_live/cgm.kafka.services.KTableGeneratorService.conf
+  redis_data_save_service_config:
+    file: ./conf_live/cgm.kafka.services.RedisDataSaveService.conf
+  dbsavefortrip_service_config:
+    file: ./conf_live/cgm.kafka.services.DBSaveMasterDataService.conf
+  rediskey_delete_scheduler_service_config:
+    file: ./conf_live/cgm.kafka.services.RedisKeyDeleteScheduler.conf

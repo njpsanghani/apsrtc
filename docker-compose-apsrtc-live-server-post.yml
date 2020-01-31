@@ -68,6 +68,15 @@ services:
     configs:
       - source: db_data_save_vehicle_service_config
         target: /app/conf_live/cgm.kafka.services.DBDataSaveVehicleService.conf
+  DBDataSaveVehicleJumpService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.DBDataSaveVehicleJumpDataService
+    configs:
+      - source: db_data_save_vehicle_jump_service_config
+        target: /app/conf_live/cgm.kafka.services.DBDataSaveVehicleJumpDataService.conf
   DBDataSaveCurrentTripService:
     image: 10.40.10.230:5000/apsrtc_new
     deploy:
@@ -86,15 +95,6 @@ services:
     configs:
       - source: db_data_save_tripdetail_service_config
         target: /app/conf_live/cgm.kafka.services.DBDataSaveTripDetailService.conf
-#  DBDataSaveTripLocationDtlsService:
-#    image: 10.40.10.230:5000/apsrtc_new
-#    deploy:
-#      replicas: 1
-#    restart: always
-#    command: java -cp sample.jar cgm.kafka.services.DBDataSaveTripLocationDtlsService
-#    configs:
-#      - source: db_data_save_triplocationdtls_service_config
-#        target: /app/conf_live/cgm.kafka.services.DBDataSaveTripLocationDtlsService.conf
   DBDataSaveTripLocationDtlsOddService:
     image: 10.40.10.230:5000/apsrtc_new
     deploy:
@@ -113,6 +113,24 @@ services:
     configs:
       - source: db_data_save_triplocationdtls_split_service_config
         target: /app/conf_live/cgm.kafka.services.DBDataSaveTripLocationDtlsSplitService.conf
+  DBDataSaveGoogleService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 1
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.DBDataSaveGoogleService
+    configs:
+      - source: db_data_save_google_location_service_config
+        target: /app/conf_live/cgm.kafka.services.DBDataSaveGoogleService.conf
+  GoogleLocationService:
+    image: 10.40.10.230:5000/apsrtc_new
+    deploy:
+      replicas: 0
+    restart: always
+    command: java -cp sample.jar cgm.kafka.services.GoogleLocationService
+    configs:
+      - source: google_location_service_config
+        target: /app/conf_live/cgm.kafka.services.GoogleLocationService.conf
   SplitTripService:
     image: 10.40.10.230:5000/apsrtc_new
     deploy:
@@ -125,7 +143,7 @@ services:
   RouteViolationService:
     image: 10.40.10.230:5000/apsrtc_new
     deploy:
-      replicas: 0
+      replicas: 1
     restart: always
     command: java -cp sample.jar cgm.kafka.services.RouteViolationService
     configs:
@@ -143,12 +161,12 @@ services:
   UnderspeedService:
     image: 10.40.10.230:5000/apsrtc_new
     deploy:
-      replicas: 0
+      replicas: 1
     restart: always
-    command: java -cp sample.jar cgm.kafka.services.UnderspeedService
+    command: java -cp sample.jar cgm.kafka.services.UnderSpeedIncident
     configs:
       - source: underspeed_service_config
-        target: /app/conf_live/cgm.kafka.services.UnderspeedService.conf
+        target: /app/conf_live/cgm.kafka.services.UnderSpeedIncident.conf
   DBDataSaveIncidentService:
     image: 10.40.10.230:5000/apsrtc_new
     deploy:
@@ -194,20 +212,26 @@ configs:
     file: ./conf_live/cgm.kafka.services.LiveTripService.conf
   db_data_save_vehicle_service_config:
     file: ./conf_live/cgm.kafka.services.DBDataSaveVehicleService.conf
+  db_data_save_vehicle_jump_service_config:
+    file: ./conf_live/cgm.kafka.services.DBDataSaveVehicleJumpDataService.conf
   db_vehicle_summary_service_config:
     file: ./conf_live/njscommunity.DBVehicleSummaryService.conf
   db_data_save_input_string_dtls_service_config:
     file: ./conf_live/njscommunity.DBDataSaveInputStringDtlsService.conf
   db_data_save_currenttripstatus_service_config:
     file: ./conf_live/cgm.kafka.services.DBDataSaveCurrentTripService.conf
+  db_data_save_google_location_service_config:
+    file: ./conf_live/cgm.kafka.services.DBDataSaveGoogleService.conf
   split_trip_service_config:
     file: ./conf_live/cgm.kafka.services.SplitTripService.conf
+  google_location_service_config:
+    file: ./conf_live/cgm.kafka.services.GoogleLocationService.conf
   route_violation_service_config:
     file: ./conf_live/cgm.kafka.services.RouteViolationService.conf
   overspeed_service_config:
     file: ./conf_live/cgm.kafka.services.OverspeedService.conf
   underspeed_service_config:
-    file: ./conf_live/cgm.kafka.services.UnderspeedService.conf
+    file: ./conf_live/cgm.kafka.services.UnderSpeedIncident.conf
   db_datasave_incident_service_config:
     file: ./conf_live/cgm.kafka.services.DBDataSaveIncidentService.conf
   earlytrip_service_config:
